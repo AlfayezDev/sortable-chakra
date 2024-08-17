@@ -21,8 +21,7 @@
     "up-interactive": "pnpm up -i",
     "up-latest": "pnpm up-interactive -L",
     "release": "standard-version",
-    "push-release": "git push --follow-tags origin main",
-    "prepare": "husky"
+    "push-release": "git push --follow-tags origin main"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -52,7 +51,6 @@
     "@vitest/ui": "^1.6.0",
     "eslint": "^8.57.0",
     "eslint-config-sznm": "^2.0.3",
-    "husky": "^9.0.11",
     "knip": "^5.16.0",
     "lint-staged": "^15.2.4",
     "prettier": "^3.2.5",
