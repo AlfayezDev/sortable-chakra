@@ -58,7 +58,18 @@ const Home: React.FC = () => {
   }, []);
   return (
     <Grid gap={4}>
-      <Toolbox isLocked={isLocked} onToggleLock={handleToggleLock} />
+      <Box mb={4} p={4} borderWidth={1} borderRadius="md">
+        <Flex align="center">
+          <Button
+            leftIcon={isLocked ? <BiLock /> : <BsUnlock />}
+            onClick={handleToggleLock}
+            colorScheme={isLocked ? 'red' : 'green'}
+          >
+            {isLocked ? 'Unlock Sorting' : 'Lock Sorting'}
+          </Button>
+        </Flex>
+      </Box>
+
       <FlexWrapper
         setItems={setFlexItems}
         items={flexItems}
@@ -72,26 +83,6 @@ const Home: React.FC = () => {
         isLocked={isLocked}
       />
     </Grid>
-  );
-};
-interface ToolboxProps {
-  isLocked: boolean;
-  onToggleLock: () => void;
-}
-
-const Toolbox: React.FC<ToolboxProps> = ({ isLocked, onToggleLock }) => {
-  return (
-    <Box mb={4} p={4} borderWidth={1} borderRadius="md">
-      <Flex align="center">
-        <Button
-          leftIcon={isLocked ? <BiLock /> : <BsUnlock />}
-          onClick={onToggleLock}
-          colorScheme={isLocked ? 'red' : 'green'}
-        >
-          {isLocked ? 'Unlock Sorting' : 'Lock Sorting'}
-        </Button>
-      </Flex>
-    </Box>
   );
 };
 const GridWrapper: React.FC<{
@@ -154,6 +145,9 @@ const GridWrapper: React.FC<{
               borderColor="grey.300"
               background={item.background}
               cursor={isLocked ? 'not-allowed' : 'grab'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              display={'flex'}
             >
               Grid Item {item.id}
             </SortableGridItem>
@@ -215,6 +209,9 @@ const FlexWrapper: React.FC<{
               width={200}
               background={p.background}
               cursor={isLocked ? 'not-allowed' : 'grab'}
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
             >
               Card {p.id}
             </SortableCard>
