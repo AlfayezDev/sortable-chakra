@@ -93,7 +93,6 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         cellHeight: 80,
         animate: true,
         float: false,
-        disableOneColumnMode: true,
         staticGrid: isLocked,
       },
       gridRef.current
@@ -181,7 +180,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
       });
     });
 
-    const onResizeStop = (event: Event, element: HTMLElement) => {
+    const onResizeStop = (_: Event, element: HTMLElement) => {
       const chartId = element.getAttribute('gs-id');
       if (chartId) {
         createOrUpdateChart(chartId);
