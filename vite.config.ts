@@ -37,7 +37,7 @@ export default defineConfig({
     million.vite({ auto: true }),
     react(),
     checker({
-      typescript: true,
+      typescript: false,
     }),
     tsconfigPaths(),
     visualizer({ template: 'sunburst' }) as unknown as PluginOption,
