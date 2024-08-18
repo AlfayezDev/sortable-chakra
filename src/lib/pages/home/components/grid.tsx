@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { renderToString } from 'react-dom/server';
-import ApexCharts from 'apexcharts';
+import ApexCharts, { ApexOptions } from 'apexcharts';
 import { GridStack, GridStackNode } from 'gridstack';
 import 'gridstack/dist/gridstack.min.css';
+import { Card } from '@chakra-ui/react';
 
 interface GridItemData {
   id: string;
@@ -11,23 +12,31 @@ interface GridItemData {
   w: number;
   h: number;
   content: string;
+  chartOptions: ApexOptions;
   backgroundColor: string;
 }
 
 interface GridstackGridProps {
   initialItems: GridItemData[];
+  minCellHeight: number;
+  minCellWidth: number;
   isLocked: boolean;
 }
 
 const GridstackGrid: React.FC<GridstackGridProps> = ({
   initialItems,
   isLocked,
+  minCellHeight,
+  minCellWidth,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [grid, setGrid] = useState<GridStack | null>(null);
   const chartsRef = useRef<{ [key: string]: ApexCharts }>({});
 
   const createOrUpdateChart = (itemId: string) => {
+    const options = initialItems.find((p) => p.id === itemId)?.chartOptions;
+    if (!options) return;
+    options.chart = options.chart ? options.chart : {};
     const chartElement = document.querySelector(
       `#content-chart-wrapper-${itemId}`
     ) as HTMLElement;
@@ -45,41 +54,13 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
     const titleHeight = 30; // Adjust this value based on your title height
     const width = contentElement.clientWidth - padding * 2;
     const height = contentElement.clientHeight - padding * 2 - titleHeight;
-
-    const chartOptions = {
-      chart: {
-        type: 'line' as const,
-        width: width,
-        height: height,
-        animations: {
-          enabled: false,
-        },
-      },
-      series: [
-        {
-          name: 'sales',
-          data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-        },
-      ],
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-      },
-      responsive: [
-        {
-          breakpoint: 300,
-          options: {
-            chart: {
-              width: '100%',
-            },
-          },
-        },
-      ],
-    };
+    options.chart!.width = width;
+    options.chart!.height = height;
 
     if (chartsRef.current[itemId]) {
-      chartsRef.current[itemId].updateOptions(chartOptions);
+      chartsRef.current[itemId].updateOptions(options);
     } else {
-      const chart = new ApexCharts(chartElement, chartOptions);
+      const chart = new ApexCharts(chartElement, options);
       chart.render();
       chartsRef.current[itemId] = chart;
     }
@@ -93,7 +74,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         cellHeight: 80,
         animate: true,
         float: false,
-        staticGrid: isLocked,
+        staticGrid: false,
       },
       gridRef.current
     );
@@ -103,14 +84,13 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         gridInstance.destroy(false);
       }
     };
-  }, [isLocked]);
+  }, []);
 
   useEffect(() => {
     if (!grid) return;
     grid.removeAll(false);
-    const element5 = initialItems.find((item) => item.id === '5');
-    const minWidth = element5 ? element5.w : 1;
-    const minHeight = element5 ? element5.h : 1;
+    const minWidth = minCellWidth;
+    const minHeight = minCellHeight;
 
     const sortedItems = [...initialItems].sort((a, b) => a.y - b.y);
 
@@ -124,7 +104,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         minW: minWidth,
         minH: minHeight,
         content: renderToString(
-          <div
+          <Card
             id={`content-id-${item.id}`}
             style={{
               padding: 10,
@@ -133,23 +113,17 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
               flexDirection: 'column',
             }}
           >
-            <p style={{ marginBottom: '10px' }}>{item.id}</p>
             <div
               id={`content-chart-wrapper-${item.id}`}
               style={{ flexGrow: 1 }}
             />
-          </div>
+          </Card>
         ),
       };
       grid.addWidget(node);
     });
-
     grid.compact();
-
-    // Delay chart creation to ensure grid items have settled
-    setTimeout(() => {
-      sortedItems.forEach((item) => createOrUpdateChart(item.id));
-    }, 100);
+    sortedItems.forEach((item) => createOrUpdateChart(item.id));
 
     return () => {
       Object.values(chartsRef.current).forEach((chart) => chart.destroy());
@@ -159,10 +133,8 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
 
   useEffect(() => {
     if (!grid) return;
-    grid.enableMove(!isLocked);
-    grid.enableResize(!isLocked);
     grid.setStatic(isLocked);
-  }, [isLocked, grid]);
+  }, [isLocked]);
 
   useEffect(() => {
     if (!grid) return;

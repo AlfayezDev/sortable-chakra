@@ -26,53 +26,6 @@ interface FlexItem {
 
 const Home: React.FC = () => {
   const [isLocked, setIsLocked] = useState(false);
-  const [gridItems] = useState([
-    {
-      id: '1',
-      x: 0,
-      y: 0,
-      w: 3,
-      h: 2,
-      content: 'Item 1',
-      backgroundColor: 'tomato',
-    },
-    {
-      id: '2',
-      x: 3,
-      y: 0,
-      w: 3,
-      h: 2,
-      content: 'Item 2',
-      backgroundColor: 'skyblue',
-    },
-    {
-      id: '3',
-      x: 6,
-      y: 0,
-      w: 3,
-      h: 2,
-      content: 'Item 3',
-      backgroundColor: 'gold',
-    },
-    {
-      id: '4',
-      x: 9,
-      y: 0,
-      w: 3,
-      h: 2,
-      content: 'Item 4',
-      backgroundColor: 'limegreen',
-    },
-    {
-      id: '5',
-      x: 0,
-      y: 2,
-      w: 6,
-      h: 4,
-      content: 'Item 5',
-      backgroundColor: 'violet',
-    },
-  ]);
   const [flexItems, setFlexItems] = useState<FlexItem[]>([
     { id: '1', background: 'teal' },
     { id: '2', background: 'snow' },
@@ -107,7 +60,63 @@ const Home: React.FC = () => {
         onSortEnd={handleFlexSortEnd}
         isLocked={isLocked}
       />
-      <ResizableGrid initialItems={gridItems} isLocked={isLocked} />
+      <ResizableGrid
+        minCellHeight={5}
+        minCellWidth={6}
+        initialItems={[
+          {
+            id: '1',
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
+            content: 'Item 1',
+            backgroundColor: '#f0f0f0',
+            chartOptions: {
+              chart: {
+                type: 'line',
+              },
+              series: [
+                {
+                  name: 'sales',
+                  data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+                },
+              ],
+              xaxis: {
+                categories: [
+                  1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+                ],
+              },
+            },
+          },
+          {
+            id: '2',
+            x: 4,
+            y: 0,
+            w: 4,
+            h: 2,
+            content: 'Item 2',
+            backgroundColor: '#e0e0e0',
+            chartOptions: {
+              chart: {
+                type: 'line',
+              },
+              series: [
+                {
+                  name: 'sales',
+                  data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+                },
+              ],
+              xaxis: {
+                categories: [
+                  1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+                ],
+              },
+            },
+          },
+        ]}
+        isLocked={isLocked}
+      />
     </Grid>
   );
 };
