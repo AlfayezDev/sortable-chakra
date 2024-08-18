@@ -74,7 +74,6 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
       const item = initialItems.find(
         (p) => p.id === node.getAttribute('gs-id')
       );
-      console.log(node, item);
       return {
         ...item!,
       };
