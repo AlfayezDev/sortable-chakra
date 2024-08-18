@@ -17,7 +17,7 @@ import React, { useCallback, useState } from 'react';
 import { SortableCard } from './components/SortableCard';
 import { BsUnlock } from 'react-icons/bs';
 import { BiLock } from 'react-icons/bi';
-import ResizableGrid from './components/grid';
+import ResizableGrid, { GridItemData } from './components/grid';
 
 interface FlexItem {
   id: string;
@@ -26,6 +26,126 @@ interface FlexItem {
 
 const Home: React.FC = () => {
   const [isLocked, setIsLocked] = useState(false);
+  const [gridItems, setGridItems] = useState<GridItemData[]>([
+    {
+      id: '1',
+      x: 0,
+      y: 0,
+      w: 4,
+      h: 2,
+      content: 'Line Chart',
+      backgroundColor: '#f0f0f0',
+      chartOptions: {
+        chart: {
+          type: 'line',
+        },
+        series: [
+          {
+            name: 'Sales',
+            data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+          },
+        ],
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+        },
+      },
+    },
+    {
+      id: '2',
+      x: 4,
+      y: 0,
+      w: 4,
+      h: 2,
+      content: 'Bar Chart',
+      backgroundColor: '#e0e0e0',
+      chartOptions: {
+        chart: {
+          type: 'bar',
+        },
+        series: [
+          {
+            name: 'Profit',
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+          },
+        ],
+        xaxis: {
+          categories: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+          ],
+        },
+      },
+    },
+    {
+      id: '3',
+      x: 0,
+      y: 2,
+      w: 4,
+      h: 2,
+      content: 'Area Chart',
+      backgroundColor: '#d0d0d0',
+      chartOptions: {
+        chart: {
+          type: 'area',
+        },
+        series: [
+          {
+            name: 'Website Traffic',
+            data: [31, 40, 28, 51, 42, 109, 100],
+          },
+        ],
+        xaxis: {
+          categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        },
+      },
+    },
+    {
+      id: '4',
+      x: 4,
+      y: 2,
+      w: 4,
+      h: 2,
+      content: 'Pie Chart',
+      backgroundColor: '#c0c0c0',
+      chartOptions: {
+        chart: {
+          type: 'pie',
+        },
+        series: [44, 55, 13, 43, 22],
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+      },
+    },
+    {
+      id: '6',
+      x: 4,
+      y: 4,
+      w: 4,
+      h: 2,
+      content: 'Radar Chart',
+      backgroundColor: '#a0a0a0',
+      chartOptions: {
+        chart: {
+          type: 'radar',
+        },
+        series: [
+          {
+            name: 'Series 1',
+            data: [80, 50, 30, 40, 100, 20],
+          },
+        ],
+        xaxis: {
+          categories: ['January', 'February', 'March', 'April', 'May', 'June'],
+        },
+      },
+    },
+  ]);
   const [flexItems, setFlexItems] = useState<FlexItem[]>([
     { id: '1', background: 'teal' },
     { id: '2', background: 'snow' },
@@ -63,135 +183,10 @@ const Home: React.FC = () => {
       <ResizableGrid
         minCellHeight={5}
         minCellWidth={6}
-        initialItems={[
-          {
-            id: '1',
-            x: 0,
-            y: 0,
-            w: 4,
-            h: 2,
-            content: 'Line Chart',
-            backgroundColor: '#f0f0f0',
-            chartOptions: {
-              chart: {
-                type: 'line',
-              },
-              series: [
-                {
-                  name: 'Sales',
-                  data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-                },
-              ],
-              xaxis: {
-                categories: [
-                  1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-                ],
-              },
-            },
-          },
-          {
-            id: '2',
-            x: 4,
-            y: 0,
-            w: 4,
-            h: 2,
-            content: 'Bar Chart',
-            backgroundColor: '#e0e0e0',
-            chartOptions: {
-              chart: {
-                type: 'bar',
-              },
-              series: [
-                {
-                  name: 'Profit',
-                  data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-                },
-              ],
-              xaxis: {
-                categories: [
-                  'Jan',
-                  'Feb',
-                  'Mar',
-                  'Apr',
-                  'May',
-                  'Jun',
-                  'Jul',
-                  'Aug',
-                  'Sep',
-                ],
-              },
-            },
-          },
-          {
-            id: '3',
-            x: 0,
-            y: 2,
-            w: 4,
-            h: 2,
-            content: 'Area Chart',
-            backgroundColor: '#d0d0d0',
-            chartOptions: {
-              chart: {
-                type: 'area',
-              },
-              series: [
-                {
-                  name: 'Website Traffic',
-                  data: [31, 40, 28, 51, 42, 109, 100],
-                },
-              ],
-              xaxis: {
-                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-              },
-            },
-          },
-          {
-            id: '4',
-            x: 4,
-            y: 2,
-            w: 4,
-            h: 2,
-            content: 'Pie Chart',
-            backgroundColor: '#c0c0c0',
-            chartOptions: {
-              chart: {
-                type: 'pie',
-              },
-              series: [44, 55, 13, 43, 22],
-              labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-            },
-          },
-          {
-            id: '6',
-            x: 4,
-            y: 4,
-            w: 4,
-            h: 2,
-            content: 'Radar Chart',
-            backgroundColor: '#a0a0a0',
-            chartOptions: {
-              chart: {
-                type: 'radar',
-              },
-              series: [
-                {
-                  name: 'Series 1',
-                  data: [80, 50, 30, 40, 100, 20],
-                },
-              ],
-              xaxis: {
-                categories: [
-                  'January',
-                  'February',
-                  'March',
-                  'April',
-                  'May',
-                  'June',
-                ],
-              },
-            },
-          },
-        ]}
+        onGridChange={(p) => {
+          console.log(p);
+        }}
+        initialItems={gridItems}
         isLocked={isLocked}
       />
     </Grid>

@@ -5,7 +5,7 @@ import { GridStack, GridStackNode } from 'gridstack';
 import 'gridstack/dist/gridstack.min.css';
 import { Card } from '@chakra-ui/react';
 
-interface GridItemData {
+export interface GridItemData {
   id: string;
   x: number;
   y: number;
@@ -21,6 +21,7 @@ interface GridstackGridProps {
   minCellHeight: number;
   minCellWidth: number;
   isLocked: boolean;
+  onGridChange: (items: GridItemData[]) => void; // New callback prop
 }
 
 const GridstackGrid: React.FC<GridstackGridProps> = ({
@@ -28,6 +29,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
   isLocked,
   minCellHeight,
   minCellWidth,
+  onGridChange, // New callback prop
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [grid, setGrid] = useState<GridStack | null>(null);
@@ -50,8 +52,8 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
     ) as HTMLElement;
     if (!contentElement) return;
 
-    const padding = 20; // Adjust this value based on your padding
-    const titleHeight = 30; // Adjust this value based on your title height
+    const padding = 20;
+    const titleHeight = 30;
     const width = contentElement.clientWidth - padding * 2;
     const height = contentElement.clientHeight - padding * 2 - titleHeight;
     options.chart!.width = width;
@@ -64,6 +66,20 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
       chart.render();
       chartsRef.current[itemId] = chart;
     }
+  };
+
+  const updateGridItems = () => {
+    if (!grid) return;
+    const updatedItems = grid.getGridItems().map((node) => {
+      const item = initialItems.find(
+        (p) => p.id === node.getAttribute('gs-id')
+      );
+      console.log(node, item);
+      return {
+        ...item!,
+      };
+    });
+    onGridChange(updatedItems);
   };
 
   useEffect(() => {
@@ -84,7 +100,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         gridInstance.destroy(false);
       }
     };
-  }, []);
+  }, [gridRef]);
 
   useEffect(() => {
     if (!grid) return;
@@ -96,11 +112,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
 
     sortedItems.forEach((item) => {
       const node: GridStackNode = {
-        id: item.id,
-        x: item.x,
-        y: item.y,
-        w: item.w,
-        h: item.h,
+        ...item,
         minW: minWidth,
         minH: minHeight,
         content: renderToString(
@@ -158,13 +170,17 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
         createOrUpdateChart(chartId);
       }
       grid.compact();
+      updateGridItems(); // Call the callback after resize
+    };
+
+    const onDragStop = () => {
+      grid.compact();
+      Object.keys(chartsRef.current).forEach(createOrUpdateChart);
+      updateGridItems(); // Call the callback after drag
     };
 
     grid.on('resizestop', onResizeStop);
-    grid.on('dragstop', () => {
-      grid.compact();
-      Object.keys(chartsRef.current).forEach(createOrUpdateChart);
-    });
+    grid.on('dragstop', onDragStop);
 
     document.querySelectorAll('.grid-stack-item-content').forEach((item) => {
       resizeObserver.observe(item);
@@ -175,7 +191,7 @@ const GridstackGrid: React.FC<GridstackGridProps> = ({
       grid.off('resizestop');
       grid.off('dragstop');
     };
-  }, [grid]);
+  }, [grid, onGridChange]);
 
   return <div className="grid-stack" ref={gridRef}></div>;
 };
