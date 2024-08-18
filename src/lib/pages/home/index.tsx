@@ -70,7 +70,7 @@ const Home: React.FC = () => {
             y: 0,
             w: 4,
             h: 2,
-            content: 'Item 1',
+            content: 'Line Chart',
             backgroundColor: '#f0f0f0',
             chartOptions: {
               chart: {
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
               },
               series: [
                 {
-                  name: 'sales',
+                  name: 'Sales',
                   data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
                 },
               ],
@@ -95,21 +95,98 @@ const Home: React.FC = () => {
             y: 0,
             w: 4,
             h: 2,
-            content: 'Item 2',
+            content: 'Bar Chart',
             backgroundColor: '#e0e0e0',
             chartOptions: {
               chart: {
-                type: 'line',
+                type: 'bar',
               },
               series: [
                 {
-                  name: 'sales',
-                  data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+                  name: 'Profit',
+                  data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
                 },
               ],
               xaxis: {
                 categories: [
-                  1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul',
+                  'Aug',
+                  'Sep',
+                ],
+              },
+            },
+          },
+          {
+            id: '3',
+            x: 0,
+            y: 2,
+            w: 4,
+            h: 2,
+            content: 'Area Chart',
+            backgroundColor: '#d0d0d0',
+            chartOptions: {
+              chart: {
+                type: 'area',
+              },
+              series: [
+                {
+                  name: 'Website Traffic',
+                  data: [31, 40, 28, 51, 42, 109, 100],
+                },
+              ],
+              xaxis: {
+                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              },
+            },
+          },
+          {
+            id: '4',
+            x: 4,
+            y: 2,
+            w: 4,
+            h: 2,
+            content: 'Pie Chart',
+            backgroundColor: '#c0c0c0',
+            chartOptions: {
+              chart: {
+                type: 'pie',
+              },
+              series: [44, 55, 13, 43, 22],
+              labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+            },
+          },
+          {
+            id: '6',
+            x: 4,
+            y: 4,
+            w: 4,
+            h: 2,
+            content: 'Radar Chart',
+            backgroundColor: '#a0a0a0',
+            chartOptions: {
+              chart: {
+                type: 'radar',
+              },
+              series: [
+                {
+                  name: 'Series 1',
+                  data: [80, 50, 30, 40, 100, 20],
+                },
+              ],
+              xaxis: {
+                categories: [
+                  'January',
+                  'February',
+                  'March',
+                  'April',
+                  'May',
+                  'June',
                 ],
               },
             },
